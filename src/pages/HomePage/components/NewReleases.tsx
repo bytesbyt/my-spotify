@@ -7,6 +7,7 @@ import Card from '../../../common/components/Card';
 
 const NewReleases = () => {
   const {data, error, isLoading} = useGetNewReleases();
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -28,19 +29,12 @@ const NewReleases = () => {
                 artistName = {album.artists[0].name}
               />
             </Grid>
-
           ))}
-
         </Grid>
-
-
-
       ) : (
         <Typography variant = "h2">No Data</Typography>
       )}
     </div>
   );
 };
-
-
 export default NewReleases;
