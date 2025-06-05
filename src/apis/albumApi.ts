@@ -1,9 +1,10 @@
 import axios from "axios";
 import { SPOTIFY_BASE_URL } from "../configs/commonConfig";
+import { getNewReleasesResponse } from "../models/albums";
 
-export const getNewReleases = async (clientCredentialToken:string) => {
+export const getNewReleases = async (clientCredentialToken:string):Promise<getNewReleasesResponse> => {
     try {
-        const response = await axios.get(`${SPOTIFY_BASE_URL}/browse/new-releases`,
+        const response = await axios.get(`${SPOTIFY_BASE_URL}/browse/new-releases?limit=6`,
         {
             headers: {
                 Authorization: `Bearer ${clientCredentialToken}`,
@@ -16,3 +17,5 @@ export const getNewReleases = async (clientCredentialToken:string) => {
         throw new Error("fail to fetch new release");
     }
 };
+
+export default getNewReleases;

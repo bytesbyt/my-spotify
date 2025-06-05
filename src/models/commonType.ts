@@ -2,13 +2,13 @@ export interface ExternalUrls {
     spotify?: string;
 }
 
-export interface Images {
+export interface Image {
     url: string;
     height: number | null;
     width: number | null;
 }
 
-export interface Restrictions {
+export interface Restriction {
     reason?: string;
 }
 

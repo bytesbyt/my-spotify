@@ -1,6 +1,6 @@
 import { ExternalUrls } from "./commonType";
 
-export interface Artists {
+export interface Artist {
     external_urls?: ExternalUrls;
     href?: string;
     id?: string;

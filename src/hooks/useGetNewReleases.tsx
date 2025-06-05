@@ -12,7 +12,7 @@ const useGetNewReleases = () => {
         }
             return getNewReleases(clientCredentialToken);
         },
-
-    });
-        
+    });   
 };
+
+export default useGetNewReleases
