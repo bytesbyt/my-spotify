@@ -6,7 +6,7 @@ interface SpinnerProps {
   color?: string;
 }
 
-const Spinner: React.FC<SpinnerProps> = ({ size = 60, color = '#1DB954' }) => {
+const LoadingSpinner: React.FC<SpinnerProps> = ({ size = 60, color = '#1DB954' }) => {
   const style: React.CSSProperties = {
     width: size,
     height: size,
@@ -21,4 +21,4 @@ const Spinner: React.FC<SpinnerProps> = ({ size = 60, color = '#1DB954' }) => {
   );
 };
 
-export default Spinner;
+export default LoadingSpinner;
