@@ -1,4 +1,4 @@
-import { styled, Box, Typography } from "@mui/material"
+import { styled, Box, Typography, useMediaQuery, useTheme } from "@mui/material"
 import React from 'react'
 import { Outlet, NavLink, } from 'react-router'
 import HomeIcon from '@mui/icons-material/Home'
@@ -22,7 +22,17 @@ const Sidebar = styled("div")(({theme}) => ({
   [theme.breakpoints.down("sm")]: {
     display: "none",
   },
-  gap: '8px',
+  gap: "8px",
+}));
+
+const MainContentBox = styled(Box)(({ theme }) => ({
+  borderRadius: "8px",
+  backgroundColor: theme.palette.background.paper,
+  color: theme.palette.text.primary,
+  width: "100%",
+  overflowY: 'auto',
+  overflowX: 'hidden', 
+  padding: "16px",
 }));
 
 const ContentBox = styled(Box)(({theme}) => ({
@@ -54,30 +64,39 @@ const StyledNavLink = styled(NavLink) (({theme}) => ({
 }));
 
 const AppLayout = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
     <Layout>
         <Sidebar>
           <ContentBox>
             <NavList>
-              <StyledNavLink to = "/">
-                <HomeIcon/>
+              <li>
+                <StyledNavLink to = "/">
+                  <HomeIcon/>
                   <Typography variant = "h2" fontWeight= {700}>Home</Typography>
-              </StyledNavLink>
-              <StyledNavLink to = "search">
-                <SearchIcon/>
+                </StyledNavLink>
+              </li>
+              <li>
+                <StyledNavLink to = "search">
+                  <SearchIcon/>
                   <Typography variant = "h2" fontWeight= {700}>Search</Typography>
-              </StyledNavLink>
+                </StyledNavLink>
+              </li>
             </NavList>
           </ContentBox>
-          <ContentBox sx={{ flexGrow: 1 }}>
+          <ContentBox sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
             <LibraryHead/>
             <Library/>
           </ContentBox>
         </Sidebar>
-          <ContentBox sx={{ padding:"15px"}}>
-            <Navbar/>
-              <Outlet/>
-          </ContentBox>
+
+        <MainContentBox sx={{ paddingBottom: isMobile ? '80px' : '16px' }}>
+          <Navbar/>
+          <Outlet/>
+        </MainContentBox>
+
     </Layout>
   )
 }
