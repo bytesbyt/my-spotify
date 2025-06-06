@@ -32,7 +32,7 @@ const MainContentBox = styled(Box)(({ theme }) => ({
   width: "100%",
   overflowY: 'auto',
   overflowX: 'hidden', 
-  padding: "16px",
+  padding: "1rem",
 }));
 
 const ContentBox = styled(Box)(({theme}) => ({
@@ -92,7 +92,7 @@ const AppLayout = () => {
           </ContentBox>
         </Sidebar>
 
-        <MainContentBox sx={{ paddingBottom: isMobile ? '80px' : '16px' }}>
+        <MainContentBox sx={{ p: { xs: 0, sm: 1, md: 2}}}>
           <Navbar/>
           <Outlet/>
         </MainContentBox>
@@ -101,4 +101,4 @@ const AppLayout = () => {
   )
 }
 
-export default AppLayout
+export default AppLayout;
