@@ -13,8 +13,7 @@ const Navbar = () => {
         alignItems="center"
         height= "64px"
     >
-      {userProfile ? userProfile.display_name : <LoginButton />}
-      {/* {userProfile ? <img src= {userProfile.images[0]?.url} /> : <LoginButton />} */}
+      {userProfile ? <img src= {userProfile.images[0]?.url} /> : <LoginButton />}
       
     </Box>
   )
