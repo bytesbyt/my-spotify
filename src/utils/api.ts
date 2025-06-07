@@ -9,6 +9,12 @@ const api = axios.create({
     },
 });
 
+api.interceptors.request.use((request)=>{
+    request.headers.Authorization = `Bearer ${localStorage.getItem(
+        "access_token"
+    )}`;
+    return request;
+});
 export default api;
 
 
