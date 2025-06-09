@@ -1,6 +1,6 @@
 import { useInfiniteQuery} from "@tanstack/react-query"
 import { GetCurrentUserPlaylistRequest } from "../models/playlist";
-import { getCurrentUserPlaylists } from "../apis/playlistAPi";
+import { getCurrentUserPlaylists } from "../apis/playlistApi";
 
 const useGetCurrentUserPlaylists = ({limit, offset}: GetCurrentUserPlaylistRequest) => {
 
