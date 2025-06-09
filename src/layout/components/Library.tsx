@@ -57,7 +57,7 @@ const Library = () => {
       ) : (
         <PlaylistContainer>
           {data?.pages.map((page, index) => (
-            <Playlist playlists={data.pages[0].items} key = {index}/>
+            <Playlist playlists={page.items} key = {index}/>
           ))}
           <div ref={ref}>
             {isFetchingNextPage && <LoadingSpinner />}
