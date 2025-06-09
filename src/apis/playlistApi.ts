@@ -1,4 +1,4 @@
-import { GetCurrentUserPlaylistRequest, GetCurrentUserPlaylistResponse, GetPlaylistRequest } from "../models/playlist"
+import { GetCurrentUserPlaylistRequest, GetCurrentUserPlaylistResponse, GetPlaylistRequest, Playlist } from "../models/playlist"
 import api from "../utils/api"
 
 export const getCurrentUserPlaylists = async({limit, offset}:
@@ -13,7 +13,7 @@ export const getCurrentUserPlaylists = async({limit, offset}:
     }
 }
 
-export const getPlaylist = async (params: GetPlaylistRequest) => {
+export const getPlaylist = async (params: GetPlaylistRequest): Promise<Playlist> => {
     try {
         const response = await api.get(`/playlists/${params.playlist_id}`, {
             params,

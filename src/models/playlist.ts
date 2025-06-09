@@ -1,5 +1,5 @@
 import { ApiResponse } from "./apiResponse";
-import { ExternalUrls, Image, Owner, Tracks } from "./commonType";
+import { Episode, ExternalUrls, Image, Owner, Track, Tracks } from "./commonType";
 
 export interface GetCurrentUserPlaylistRequest {
     limit?: number,
@@ -8,9 +8,9 @@ export interface GetCurrentUserPlaylistRequest {
 
 export type GetCurrentUserPlaylistResponse = ApiResponse<SimplifiedPlaylistObject>;
 
-export interface SimplifiedPlaylistObject {
+export interface BasePlaylist {
     collaborative?: boolean;
-    description?: string;
+    description?: string | null;
     external_urls?: ExternalUrls;
     href?: string;
     id?: string;
@@ -19,9 +19,28 @@ export interface SimplifiedPlaylistObject {
     owner?: Owner;
     public?: boolean;
     snapshot_id?: string;
-    tracks?: Tracks;
-    type?: string;
+    type?: "playlist";
     uri?: string;
+}
+export interface SimplifiedPlaylistObject extends BasePlaylist{
+    tracks?: Tracks;
+}
+
+export interface Playlist extends BasePlaylist {
+    tracks?: ApiResponse<PlaylistTrack>;
+}
+
+export interface PlaylistTrack {
+    added_at?: string | null;
+    added_by?: {
+        external_urls?: ExternalUrls;
+        href?: string;
+        id?: string;
+        type?: string;
+        uri?: string;
+    } | null;
+    is_local?: boolean;
+    track?: Track | Episode;
 }
 
 export interface GetPlaylistRequest {
