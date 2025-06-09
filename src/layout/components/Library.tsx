@@ -10,7 +10,7 @@ import { useInView } from 'react-intersection-observer';
 
 const PlaylistContainer = styled("div")(({ theme }) => ({
   overflowY: "auto",
-  maxHeight: "calc(100vh - 240px)",
+  maxHeight: "calc(100vh - 180px)",
   height: "100%",
   "&::-webkit-scrollbar": {
     display: "none",
@@ -40,7 +40,6 @@ const Library = () => {
     }
   }, [inView]);
   if (!user) return <EmptyPlaylist />;
-   console.log("ddd", data);
   
   if (isLoading) {
     return <LoadingSpinner />;
