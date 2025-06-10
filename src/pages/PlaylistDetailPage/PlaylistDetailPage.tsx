@@ -2,18 +2,30 @@ import React from 'react'
 import { Navigate, useParams } from 'react-router';
 import useGetPlaylist from '../../hooks/useGetPlaylist';
 import { Box, Grid, styled, Typography } from '@mui/material';
-
 import DefaultImage from '../../layout/components/DefaultImage';
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import LoadingSpinner from '../../common/components/LoadingSpinner';
 import spotify from './spotify.png';
 
-const PlaylistHeaderContainer = styled(Grid)({
-  display: "flex",
-  alignItems: "center",
-  width: "100%",
-  padding: "16px",
-})
+const AlbumImage = styled("img")(({ theme }) => ({
+  borderRadius: "8px",
+  width: "20vh",
+  maxWidth: "350px",
+  aspectRatio: "1 / 1",
+  objectFit: "cover",
+  [theme.breakpoints.down("md")]: {
+    maxWidth: "200px",
+  },
+  boxShadow: "0 25px 50px -12px rgb(0 0 0 / 0.4)",
+}));
+
+const PlaylistHeaderContainer = styled(Grid)(({ theme }) => ({
+  padding: theme.spacing(2),
+  alignItems: 'center',
+  [theme.breakpoints.up('md')]: {
+    padding: theme.spacing(3),
+  },
+}));
 
 const ImageGrid = styled(Grid)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
@@ -23,36 +35,24 @@ const ImageGrid = styled(Grid)(({ theme }) => ({
   },
 }));
 
-const AlbumImage = styled("img")(({ theme }) => ({
-  borderRadius: "8px",
-  height: "auto",
-  width: "100%",
-  maxWidth: "300px",
-  [theme.breakpoints.down("md")]: {
-    maxWidth: "200px",
-  },
-}));
-
 const ResponsiveTypography = styled(Typography)(({ theme }) => ({
-  fontSize: "3rem",
+  fontSize: "2.5rem",
   textAlign: "left",
-
   [theme.breakpoints.down("md")]: {
-    fontSize: "1rem",
+    fontSize: "1.5rem",
   },
 }));
 
 const PlaylistDetailPage: React.FC = () => {
   const {id} = useParams < {id?: string }>();
   const {data: playlist, isLoading, isError } = useGetPlaylist({playlist_id : id ?? ''});
-  console.log("ddd", playlist)
 
   if (!id) return <Navigate to = "/" />;
   if (isLoading) return <LoadingSpinner />;
   if (isError || !playlist) return <div>Failed to load the playlist</div>
 
   return (
-    <PlaylistHeaderContainer container spacing={7}>
+    <PlaylistHeaderContainer container spacing={{ xs: 2, md: 4}}>
       <ImageGrid item sm={12} md={2}>
         {playlist?.images ? (
           <AlbumImage
@@ -71,18 +71,17 @@ const PlaylistDetailPage: React.FC = () => {
           <ResponsiveTypography variant="h1" color="white" mb={2}>
               {playlist?.name}
           </ResponsiveTypography>
-          <Box display= "flex" align = "center">
+          <Box display= "flex" alignItems = "center">
             <img src = {spotify} alt = "Spotify logo"
               width = "20px"
             />
-            <Typography variant ="subtitle1" color="FFFFFF" ml={1} fontWeight={700}>
+            <Typography variant ="subtitle1" color="#FFFFFF" ml={1} fontWeight={700}>
                { playlist?.owner?.display_name? playlist?.owner?.display_name : "unknown"  }
             </Typography>
-            <Typography variant ="subtitle1" color="FFFFFF" ml={1} fontWeight={700}>
+            <Typography variant ="subtitle1" color="#FFFFFF" ml={1} fontWeight={700}>
               • { playlist?.tracks?.total? playlist?.tracks?.total : "0" } songs
             </Typography>
           </Box>
-
         </Box>
 
       </Grid>
