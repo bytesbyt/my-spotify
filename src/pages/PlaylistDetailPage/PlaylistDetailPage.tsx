@@ -2,9 +2,11 @@ import React from 'react'
 import { Navigate, useParams } from 'react-router';
 import useGetPlaylist from '../../hooks/useGetPlaylist';
 import { Box, Grid, styled, Typography } from '@mui/material';
+
 import DefaultImage from '../../layout/components/DefaultImage';
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import LoadingSpinner from '../../common/components/LoadingSpinner';
+import spotify from './spotify.png';
 
 const PlaylistHeaderContainer = styled(Grid)({
   display: "flex",
@@ -43,6 +45,7 @@ const ResponsiveTypography = styled(Typography)(({ theme }) => ({
 const PlaylistDetailPage: React.FC = () => {
   const {id} = useParams < {id?: string }>();
   const {data: playlist, isLoading, isError } = useGetPlaylist({playlist_id : id ?? ''});
+  console.log("ddd", playlist)
 
   if (!id) return <Navigate to = "/" />;
   if (isLoading) return <LoadingSpinner />;
@@ -62,11 +65,23 @@ const PlaylistDetailPage: React.FC = () => {
           </DefaultImage>
           )}
       </ImageGrid>
+
       <Grid item sm={12} md={10}>
         <Box>
-          <ResponsiveTypography variant="h1" color="white">
+          <ResponsiveTypography variant="h1" color="white" mb={2}>
               {playlist?.name}
           </ResponsiveTypography>
+          <Box display= "flex" align = "center">
+            <img src = {spotify} alt = "Spotify logo"
+              width = "20px"
+            />
+            <Typography variant ="subtitle1" color="FFFFFF" ml={1} fontWeight={700}>
+               { playlist?.owner?.display_name? playlist?.owner?.display_name : "unknown"  }
+            </Typography>
+            <Typography variant ="subtitle1" color="FFFFFF" ml={1} fontWeight={700}>
+              • { playlist?.tracks?.total? playlist?.tracks?.total : "0" } songs
+            </Typography>
+          </Box>
 
         </Box>
 
