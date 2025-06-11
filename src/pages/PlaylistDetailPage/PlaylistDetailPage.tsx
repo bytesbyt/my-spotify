@@ -8,6 +8,9 @@ import LoadingSpinner from '../../common/components/LoadingSpinner';
 import spotify from './spotify.png';
 import ErrorMessage from '../../common/components/ErrorMessage';
 import useGetPlaylistItems from '../../hooks/useGetPlaylistItems';
+import { PagesTwoTone } from '@mui/icons-material';
+import DesktopPlaylistItem from './components/DesktopPlaylistItem';
+import { PAGE_LIMIT } from '../../configs/commonConfig';
 
 
 const AlbumImage = styled("img")(({ theme }) => ({
@@ -62,7 +65,7 @@ const PlaylistDetailPage: React.FC = () => {
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage
-  } = useGetPlaylistItems({playlist_id: id, limit: 10});
+  } = useGetPlaylistItems({playlist_id: id, limit: PAGE_LIMIT});
 
   console.log("ddd", playlistItems );
 
@@ -117,16 +120,19 @@ const PlaylistDetailPage: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {/* {playlist?.pages.map(page=>page.items.map(item =>{
-              return <DesktopPlaylistItem/>
-            }))} */}
+            {playlistItems?.pages.map((page, pageIndex) =>
+              page.items.map((item, itemIndex) => (
+                <DesktopPlaylistItem
+                  item={item} 
+                  key={pageIndex * PAGE_LIMIT + itemIndex + 1}
+                  index={pageIndex * PAGE_LIMIT + itemIndex + 1}
+                />
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>
-      }
-
-      
-      
+      }   
     </div>
 
   );

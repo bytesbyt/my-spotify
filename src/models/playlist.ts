@@ -40,7 +40,7 @@ export interface PlaylistTrack {
         uri?: string;
     } | null;
     is_local?: boolean;
-    track?: Track | Episode;
+    track: Track | Episode;
 }
 
 export interface GetPlaylistRequest {
