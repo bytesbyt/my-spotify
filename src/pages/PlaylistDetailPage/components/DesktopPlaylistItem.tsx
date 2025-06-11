@@ -20,7 +20,7 @@ const DesktopPlaylistItem = ({item, index}: DesktopPlaylistItemProps ) => {
             <TableCell> {isEpisode(item.track) ? "N/A": item.track?.album?.name } </TableCell>
             <TableCell>
                 {item.added_at
-                    ? new Date(item.added_at).toLocaleDateString()
+                    ? new Date(item.added_at).toISOString(). split('T')[0]
                     : 'Unknown'}
             </TableCell>
             <TableCell> 
