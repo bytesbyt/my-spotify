@@ -75,7 +75,6 @@ export interface Track {
 }
 
 export interface Episode {
-  audio_preview_url: string | null;
   description: string;
   html_description: string;
   duration_ms: number;
@@ -86,7 +85,6 @@ export interface Episode {
   images: Image[];
   is_externally_hosted: boolean;
   is_playable: boolean;
-  language?: string; 
   languages: string[];
   name: string;
   release_date: string;
