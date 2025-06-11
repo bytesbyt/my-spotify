@@ -80,7 +80,7 @@ const PlaylistDetailPage: React.FC = () => {
     return <ErrorMessage errorMessage = {playlistError.message} />;
 
   return (
-    <div>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: '#121212' , color: 'white' }}>
       <PlaylistHeaderContainer container spacing={{ xs: 2, md: 4}}>
         <ImageGrid item sm={12} md={2}>
           {playlist?.images ? (
@@ -114,12 +114,14 @@ const PlaylistDetailPage: React.FC = () => {
           </Box>
         </Grid>
       </PlaylistHeaderContainer> 
-      {playlist?.tracks?.total === 0 ? <Typography>Search</Typography> : <TableContainer
-        sx={{ maxHeight: 800,
-          scrollbarWidth: 'none', 
+      {playlist?.tracks?.total === 0 ? <Typography>***Search***</Typography> : <TableContainer
+        sx={{ 
+          flexGrow: 1,
+          overflow: 'auto',
           '&::-webkit-scrollbar': {
-          display: 'none', 
-      },
+            display: 'none',
+          }
+
         }}>
           <Table stickyHeader>
             <TableHead>
@@ -133,10 +135,13 @@ const PlaylistDetailPage: React.FC = () => {
             </TableHead>
             <TableBody
               sx = {{
+                '& .MuiTableCell-root': {
+                  color: '#B3B3B3',
+                  borderBottom: 'none'
+                },
                 '& tr:hover': {
-                  backgroundColor: '#262626',
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
                   cursor: 'poiner',
-                  borderRadius: "8px",
                 },
               }}
             >
@@ -156,7 +161,7 @@ const PlaylistDetailPage: React.FC = () => {
           </Table>
         </TableContainer>
       }   
-    </div>
+    </Box>
   );
 };
 
