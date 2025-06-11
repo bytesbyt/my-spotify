@@ -5,13 +5,12 @@ import { getPlaylistItems } from "../apis/playlistApi";
 const useGetPlaylistItems = (params: GetPlaylistItemsRequest) => {
     return useInfiniteQuery({
         queryKey: ['playlist-items', params],
-        queryFn: ({ pageParam }) => {
+        queryFn: ({ pageParam = 0 }) => {
             return getPlaylistItems({offset: pageParam, ...params});
-
         },
         initialPageParam: 0,
         getNextPageParam: (lastPage) => {
-            if(lastPage.next) {
+            if (lastPage.next) {
                 const url = new URL(lastPage.next);
                 const nextOffset = url.searchParams.get("offset");
                 return nextOffset?parseInt(nextOffset): undefined;

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Navigate, useParams } from 'react-router';
 import useGetPlaylist from '../../hooks/useGetPlaylist';
 import { Box, Grid, styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
@@ -11,6 +11,7 @@ import useGetPlaylistItems from '../../hooks/useGetPlaylistItems';
 import { PagesTwoTone } from '@mui/icons-material';
 import DesktopPlaylistItem from './components/DesktopPlaylistItem';
 import { PAGE_LIMIT } from '../../configs/commonConfig';
+import { useInView } from 'react-intersection-observer';
 
 
 const AlbumImage = styled("img")(({ theme }) => ({
@@ -58,6 +59,8 @@ const PlaylistDetailPage: React.FC = () => {
     error: playlistError,
   } = useGetPlaylist({playlist_id : id});
 
+  const { ref, inView } = useInView();
+
   const {
     data: playlistItems,
     isLoading: isPlaylistItemsLoading,
@@ -66,8 +69,11 @@ const PlaylistDetailPage: React.FC = () => {
     isFetchingNextPage,
     fetchNextPage
   } = useGetPlaylistItems({playlist_id: id, limit: PAGE_LIMIT});
-
-  console.log("ddd", playlistItems );
+  useEffect(() => {
+    if(inView && hasNextPage && !isFetchingNextPage){
+      fetchNextPage();
+    }
+  }, [inView]);
 
   if (isPlaylistLoading) return <LoadingSpinner />;
   if (playlistError)
@@ -108,33 +114,49 @@ const PlaylistDetailPage: React.FC = () => {
           </Box>
         </Grid>
       </PlaylistHeaderContainer> 
-      {playlist?.tracks?.total === 0 ? <Typography>Search</Typography> : <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>#</TableCell>
-              <TableCell>Title</TableCell>
-              <TableCell>Album</TableCell>
-              <TableCell>Date Added</TableCell>
-              <TableCell>Duration</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {playlistItems?.pages.map((page, pageIndex) =>
-              page.items.map((item, itemIndex) => (
-                <DesktopPlaylistItem
-                  item={item} 
-                  key={pageIndex * PAGE_LIMIT + itemIndex + 1}
-                  index={pageIndex * PAGE_LIMIT + itemIndex + 1}
-                />
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      {playlist?.tracks?.total === 0 ? <Typography>Search</Typography> : <TableContainer
+        sx={{ maxHeight: 800,
+          scrollbarWidth: 'none', 
+          '&::-webkit-scrollbar': {
+          display: 'none', 
+      },
+        }}>
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow>
+                <TableCell>#</TableCell>
+                <TableCell>Title</TableCell>
+                <TableCell>Album</TableCell>
+                <TableCell>Date Added</TableCell>
+                <TableCell>Duration</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody
+              sx = {{
+                '& tr:hover': {
+                  backgroundColor: '#262626',
+                  cursor: 'poiner',
+                  borderRadius: "8px",
+                },
+              }}
+            >
+              {playlistItems?.pages.map((page, pageIndex) =>
+                page.items.map((item, itemIndex) => (
+                  <DesktopPlaylistItem
+                    item={item} 
+                    key={pageIndex * PAGE_LIMIT + itemIndex + 1}
+                    index={pageIndex * PAGE_LIMIT + itemIndex + 1}
+                  />
+                ))
+              )}
+              <div ref={ref}>
+                {isFetchingNextPage && <LoadingSpinner />}
+              </div>
+            </TableBody>
+          </Table>
+        </TableContainer>
       }   
     </div>
-
   );
 };
 

@@ -7,7 +7,7 @@ const useGetCurrentUserPlaylists = ({limit, offset}: GetCurrentUserPlaylistReque
 
     return useInfiniteQuery({
         queryKey: ["current-user-playlists", limit, offset],
-        queryFn:({ pageParam = 0 }) => {
+        queryFn:({ pageParam = 0}) => {
             return getCurrentUserPlaylists({limit, offset: pageParam});
         },
         initialPageParam: 0,

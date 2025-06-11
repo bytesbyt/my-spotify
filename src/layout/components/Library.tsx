@@ -30,15 +30,17 @@ const Library = () => {
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage
-  } = useGetCurrentUserPlaylists({ limit: 10, offset: 0 });
- 
-  
+  } = useGetCurrentUserPlaylists({
+    limit: 10,
+    offset: 0
+  });
   const { data: user } = useGetCurrentUserProfile();
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage){
       fetchNextPage()
     }
   }, [inView]);
+
   if (!user) return <EmptyPlaylist />;
   
   if (isLoading) {
@@ -59,6 +61,7 @@ const Library = () => {
             <Playlist playlists={page.items} key = {index}/>
           ))}
           <div ref={ref}>
+            .
             {isFetchingNextPage && <LoadingSpinner />}
           </div>
 
