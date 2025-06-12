@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Navigate, useParams } from 'react-router';
 import useGetPlaylist from '../../hooks/useGetPlaylist';
 import { Box, Grid, styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
@@ -53,13 +53,19 @@ const ResponsiveTypography = styled(Typography)(({ theme }) => ({
 const PlaylistDetailPage: React.FC = () => {
   const {id} = useParams < {id?: string }>();
   if (id === undefined ) return <Navigate to = "/" />;
+
+  const scrollContainerRef = useRef(null);
+  
   const {
     data: playlist,
     isLoading: isPlaylistLoading,
     error: playlistError,
   } = useGetPlaylist({playlist_id : id});
 
-  const { ref, inView } = useInView();
+  const { ref, inView } = useInView({
+    root: scrollContainerRef.current,
+    rootMargin: "100px 0px", 
+  });
 
   const {
     data: playlistItems,
@@ -115,13 +121,13 @@ const PlaylistDetailPage: React.FC = () => {
         </Grid>
       </PlaylistHeaderContainer> 
       {playlist?.tracks?.total === 0 ? <Typography>***Search***</Typography> : <TableContainer
+        ref = {scrollContainerRef}
         sx={{ 
           flexGrow: 1,
           overflow: 'auto',
           '&::-webkit-scrollbar': {
             display: 'none',
           }
-
         }}>
           <Table stickyHeader>
             <TableHead>
@@ -154,9 +160,9 @@ const PlaylistDetailPage: React.FC = () => {
                   />
                 ))
               )}
-              <div ref={ref}>
+              <TableRow ref={ref}>
                 {isFetchingNextPage && <LoadingSpinner />}
-              </div>
+              </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
