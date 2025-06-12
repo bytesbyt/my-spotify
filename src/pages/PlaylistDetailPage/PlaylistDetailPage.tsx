@@ -12,6 +12,8 @@ import { PagesTwoTone } from '@mui/icons-material';
 import DesktopPlaylistItem from './components/DesktopPlaylistItem';
 import { PAGE_LIMIT } from '../../configs/commonConfig';
 import { useInView } from 'react-intersection-observer';
+import LoginButton from '../../common/components/LoginButton';
+import { AxiosError } from 'axios';
 
 
 const AlbumImage = styled("img")(({ theme }) => ({
@@ -70,7 +72,7 @@ const PlaylistDetailPage: React.FC = () => {
   const {
     data: playlistItems,
     isLoading: isPlaylistItemsLoading,
-    error: playlistItemsLoading,
+    error: playlistItemsError,
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage
@@ -81,9 +83,37 @@ const PlaylistDetailPage: React.FC = () => {
     }
   }, [inView]);
 
-  if (isPlaylistLoading) return <LoadingSpinner />;
-  if (playlistError)
-    return <ErrorMessage errorMessage = {playlistError.message} />;
+  if (isPlaylistLoading ) return <LoadingSpinner />;
+
+  const renderUnauthorizedError = () => (
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      height="100%"
+      flexDirection="column"
+    >
+      <Typography variant="h2" fontWeight={700} mb="20px">
+        Please login again
+      </Typography>
+      <LoginButton />
+    </Box>
+  );
+
+  if (
+    (playlistError instanceof AxiosError && playlistError.response?.status === 401) ||
+    (playlistItemsError instanceof AxiosError && playlistItemsError.response?.status === 401)
+  ) {
+    return renderUnauthorizedError();
+  };
+
+  if (playlistError) {
+    return <ErrorMessage errorMessage="Failed to load playlist" />;
+  };
+
+  if (playlistItemsError) {
+      return <ErrorMessage errorMessage="failed to load playlist items" />;
+  };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '90%', backgroundColor: '#121212' , color: 'white' }}>
