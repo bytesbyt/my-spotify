@@ -40,9 +40,13 @@ export const createPlaylist = async (
     params: CreatePlaylistRequest
     ): Promise<Playlist> => {
     try {
+        const {name, playlist_public, collaborative, description} = params
         const response = await api.post(`/users/${user_id}/playlists`, {
-            params
-        })
+            name,
+            public: playlist_public,
+            collaborative,
+            description,
+        });
         return response.data
     } catch (error) {
         throw new Error ("Failed to create playlist");

@@ -59,7 +59,7 @@ export type GetPlaylistItemsResponse = ApiResponse<PlaylistTrack>
 
 export interface CreatePlaylistRequest {
     name: string;
-    public?: boolean;
-    collaborqative?: boolean;
+    playlist_public?: boolean;
+    collaborative?: boolean;
     description?: string;
 }
