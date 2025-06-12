@@ -86,7 +86,7 @@ const PlaylistDetailPage: React.FC = () => {
     return <ErrorMessage errorMessage = {playlistError.message} />;
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: '#121212' , color: 'white' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '90%', backgroundColor: '#121212' , color: 'white' }}>
       <PlaylistHeaderContainer container spacing={{ xs: 2, md: 4}}>
         <ImageGrid item sm={12} md={2}>
           {playlist?.images ? (
@@ -161,7 +161,11 @@ const PlaylistDetailPage: React.FC = () => {
                 ))
               )}
               <TableRow ref={ref}>
-                {isFetchingNextPage && <LoadingSpinner />}
+                {isFetchingNextPage && (
+                  <TableCell colSpan={5} sx={{ textAlign: 'center', borderBottom: 'none' }}>
+                    <LoadingSpinner />
+                  </TableCell>
+                )}
               </TableRow>
             </TableBody>
           </Table>
