@@ -100,19 +100,11 @@ const PlaylistDetailPage: React.FC = () => {
     </Box>
   );
 
-  if (
-    (playlistError instanceof AxiosError && playlistError.response?.status === 401) ||
-    (playlistItemsError instanceof AxiosError && playlistItemsError.response?.status === 401)
-  ) {
+  if (playlistItemsError instanceof AxiosError && playlistItemsError.response?.status === 401) {
     return renderUnauthorizedError();
   };
-
-  if (playlistError) {
-    return <ErrorMessage errorMessage="Failed to load playlist" />;
-  };
-
-  if (playlistItemsError) {
-      return <ErrorMessage errorMessage="failed to load playlist items" />;
+  if (playlistItemsError || playlistError) {
+      return <ErrorMessage errorMessage="Failed to load" />;
   };
 
   return (
