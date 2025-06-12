@@ -1,20 +1,30 @@
-import React, { useEffect, useRef } from 'react'
-import { Navigate, useParams } from 'react-router';
-import useGetPlaylist from '../../hooks/useGetPlaylist';
-import { Box, Grid, styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
-import DefaultImage from '../../layout/components/DefaultImage';
+import React, { useEffect, useRef } from "react";
+import { Navigate, useParams } from "react-router";
+import useGetPlaylist from "../../hooks/useGetPlaylist";
+import {
+  Box,
+  Grid,
+  styled,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
+import DefaultImage from "../../layout/components/DefaultImage";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
-import LoadingSpinner from '../../common/components/LoadingSpinner';
-import spotify from './spotify.png';
-import ErrorMessage from '../../common/components/ErrorMessage';
-import useGetPlaylistItems from '../../hooks/useGetPlaylistItems';
-import { PagesTwoTone } from '@mui/icons-material';
-import DesktopPlaylistItem from './components/DesktopPlaylistItem';
-import { PAGE_LIMIT } from '../../configs/commonConfig';
-import { useInView } from 'react-intersection-observer';
-import LoginButton from '../../common/components/LoginButton';
-import { AxiosError } from 'axios';
-
+import LoadingSpinner from "../../common/components/LoadingSpinner";
+import spotify from "./spotify.png";
+import ErrorMessage from "../../common/components/ErrorMessage";
+import useGetPlaylistItems from "../../hooks/useGetPlaylistItems";
+import DesktopPlaylistItem from "./components/DesktopPlaylistItem";
+import { PAGE_LIMIT } from "../../configs/commonConfig";
+import { useInView } from "react-intersection-observer";
+import LoginButton from "../../common/components/LoginButton";
+import { AxiosError } from "axios";
+import EmptyPlaylistWithSearch from "../HomePage/components/EmptyPlaylistWithSearch";
 
 const AlbumImage = styled("img")(({ theme }) => ({
   borderRadius: "8px",
@@ -30,8 +40,8 @@ const AlbumImage = styled("img")(({ theme }) => ({
 
 const PlaylistHeaderContainer = styled(Grid)(({ theme }) => ({
   padding: theme.spacing(2),
-  alignItems: 'center',
-  [theme.breakpoints.up('md')]: {
+  alignItems: "center",
+  [theme.breakpoints.up("md")]: {
     padding: theme.spacing(3),
   },
 }));
@@ -53,20 +63,20 @@ const ResponsiveTypography = styled(Typography)(({ theme }) => ({
 }));
 
 const PlaylistDetailPage: React.FC = () => {
-  const {id} = useParams < {id?: string }>();
-  if (id === undefined ) return <Navigate to = "/" />;
+  const { id } = useParams<{ id?: string }>();
+  if (id === undefined) return <Navigate to="/" />;
 
   const scrollContainerRef = useRef(null);
-  
+
   const {
     data: playlist,
     isLoading: isPlaylistLoading,
     error: playlistError,
-  } = useGetPlaylist({playlist_id : id});
+  } = useGetPlaylist({ playlist_id: id });
 
   const { ref, inView } = useInView({
     root: scrollContainerRef.current,
-    rootMargin: "100px 0px", 
+    rootMargin: "100px 0px",
   });
 
   const {
@@ -75,15 +85,15 @@ const PlaylistDetailPage: React.FC = () => {
     error: playlistItemsError,
     hasNextPage,
     isFetchingNextPage,
-    fetchNextPage
-  } = useGetPlaylistItems({playlist_id: id, limit: PAGE_LIMIT});
+    fetchNextPage,
+  } = useGetPlaylistItems({ playlist_id: id, limit: PAGE_LIMIT });
   useEffect(() => {
-    if(inView && hasNextPage && !isFetchingNextPage){
+    if (inView && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
   }, [inView]);
 
-  if (isPlaylistLoading ) return <LoadingSpinner />;
+  if (isPlaylistLoading) return <LoadingSpinner />;
 
   const renderUnauthorizedError = () => (
     <Box
@@ -100,57 +110,83 @@ const PlaylistDetailPage: React.FC = () => {
     </Box>
   );
 
-  if (playlistItemsError instanceof AxiosError && playlistItemsError.response?.status === 401) {
+  if (
+    playlistItemsError instanceof AxiosError &&
+    playlistItemsError.response?.status === 401
+  ) {
     return renderUnauthorizedError();
-  };
+  }
   if (playlistItemsError || playlistError) {
-      return <ErrorMessage errorMessage="Failed to load" />;
-  };
+    return <ErrorMessage errorMessage="Failed to load" />;
+  }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '90%', backgroundColor: '#121212' , color: 'white' }}>
-      <PlaylistHeaderContainer container spacing={{ xs: 2, md: 4}}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        height: "90%",
+        backgroundColor: "#121212",
+        color: "white",
+      }}
+    >
+      <PlaylistHeaderContainer container spacing={{ xs: 2, md: 4 }}>
         <ImageGrid item sm={12} md={2}>
           {playlist?.images ? (
             <AlbumImage
               src={playlist?.images[0].url}
-              alt={`${playlist.name || 'Playlist'} cover`}
+              alt={`${playlist.name || "Playlist"} cover`}
             />
-            ) : (
+          ) : (
             <DefaultImage>
               <MusicNoteIcon fontSize="large" />
             </DefaultImage>
-            )}
+          )}
         </ImageGrid>
 
         <Grid item sm={12} md={10}>
           <Box>
             <ResponsiveTypography variant="h1" color="white" mb={2}>
-                {playlist?.name}
+              {playlist?.name}
             </ResponsiveTypography>
-            <Box display= "flex" alignItems = "center">
-              <img src = {spotify} alt = "Spotify logo"
-                width = "20px"
-              />
-              <Typography variant ="subtitle1" color="#FFFFFF" ml={1} fontWeight={700}>
-                { playlist?.owner?.display_name? playlist?.owner?.display_name : "unknown"  }
+            <Box display="flex" alignItems="center">
+              <img src={spotify} alt="Spotify logo" width="20px" />
+              <Typography
+                variant="subtitle1"
+                color="#FFFFFF"
+                ml={1}
+                fontWeight={700}
+              >
+                {playlist?.owner?.display_name
+                  ? playlist?.owner?.display_name
+                  : "unknown"}
               </Typography>
-              <Typography variant ="subtitle1" color="#FFFFFF" ml={1} fontWeight={700}>
-                • { playlist?.tracks?.total? playlist?.tracks?.total : "0" } songs
+              <Typography
+                variant="subtitle1"
+                color="#FFFFFF"
+                ml={1}
+                fontWeight={700}
+              >
+                • {playlist?.tracks?.total ? playlist?.tracks?.total : "0"}{" "}
+                songs
               </Typography>
             </Box>
           </Box>
         </Grid>
-      </PlaylistHeaderContainer> 
-      {playlist?.tracks?.total === 0 ? <Typography>***Search***</Typography> : <TableContainer
-        ref = {scrollContainerRef}
-        sx={{ 
-          flexGrow: 1,
-          overflow: 'auto',
-          '&::-webkit-scrollbar': {
-            display: 'none',
-          }
-        }}>
+      </PlaylistHeaderContainer>
+      {playlist?.tracks?.total === 0 ? (
+        <EmptyPlaylistWithSearch />
+      ) : (
+        <TableContainer
+          ref={scrollContainerRef}
+          sx={{
+            flexGrow: 1,
+            overflow: "auto",
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
+          }}
+        >
           <Table stickyHeader>
             <TableHead>
               <TableRow>
@@ -162,21 +198,21 @@ const PlaylistDetailPage: React.FC = () => {
               </TableRow>
             </TableHead>
             <TableBody
-              sx = {{
-                '& .MuiTableCell-root': {
-                  color: '#B3B3B3',
-                  borderBottom: 'none'
+              sx={{
+                "& .MuiTableCell-root": {
+                  color: "#B3B3B3",
+                  borderBottom: "none",
                 },
-                '& tr:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                  cursor: 'poiner',
+                "& tr:hover": {
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                  cursor: "poiner",
                 },
               }}
             >
               {playlistItems?.pages.map((page, pageIndex) =>
                 page.items.map((item, itemIndex) => (
                   <DesktopPlaylistItem
-                    item={item} 
+                    item={item}
                     key={pageIndex * PAGE_LIMIT + itemIndex + 1}
                     index={pageIndex * PAGE_LIMIT + itemIndex + 1}
                   />
@@ -184,7 +220,10 @@ const PlaylistDetailPage: React.FC = () => {
               )}
               <TableRow ref={ref}>
                 {isFetchingNextPage && (
-                  <TableCell colSpan={5} sx={{ textAlign: 'center', borderBottom: 'none' }}>
+                  <TableCell
+                    colSpan={5}
+                    sx={{ textAlign: "center", borderBottom: "none" }}
+                  >
                     <LoadingSpinner />
                   </TableCell>
                 )}
@@ -192,7 +231,7 @@ const PlaylistDetailPage: React.FC = () => {
             </TableBody>
           </Table>
         </TableContainer>
-      }   
+      )}
     </Box>
   );
 };
