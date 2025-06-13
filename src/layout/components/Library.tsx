@@ -36,7 +36,7 @@ const Library = () => {
     offset: 0
   });
 
-  const { data: user } = useGetCurrentUserProfile();
+  const { data: user} = useGetCurrentUserProfile();
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage){
       fetchNextPage()
@@ -52,7 +52,7 @@ const Library = () => {
   if (error) {
     return <ErrorMessage errorMessage={error.message} />;
   }
-  
+
   return (
     <div>
       {!data ||data?.pages[0].total === 0 ? (
