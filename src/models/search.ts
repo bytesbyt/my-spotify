@@ -1,3 +1,8 @@
+import { SimplifiedAlbum } from "./albums";
+import { ApiResponse } from "./apiResponse";
+import { Artist } from "./artist";
+import { ShowSimplified, SimplifiedAudiobook, SimplifiedEpisode, Track } from "./commonType";
+import { SimplifiedPlaylistObject } from "./playlist";
 
 export const enum SEARCH_TYPE {
     Album = "album", 
@@ -16,4 +21,14 @@ export interface SearchRequestparams {
     limit?: number;
     offset?: number;
     include_external?: "audio";
+}
+
+export interface SearchResponse {
+    tracks?: ApiResponse<Track>;
+    artists?: ApiResponse<Artist>;
+    albums?: ApiResponse<SimplifiedAlbum>;
+    playlists?: ApiResponse<SimplifiedPlaylistObject>;
+    shows?: ApiResponse<ShowSimplified>;
+    episodes?: ApiResponse<SimplifiedEpisode>;
+    audiobooks?: ApiResponse<SimplifiedAudiobook>;
 }

@@ -1,8 +1,8 @@
 import axios from "axios"
 import { SPOTIFY_BASE_URL } from "../configs/commonConfig"
-import { SearchRequestparams } from "../models/search"
+import { SearchRequestparams, SearchResponse } from "../models/search"
 
-export const searchItemsByKeyword = async(token: string, params: SearchRequestparams): Promise<> => {
+export const searchItemsByKeyword = async(token: string, params: SearchRequestparams): Promise<SearchResponse> => {
     try {
         const searchParams = new URLSearchParams()
         searchParams.append("q", params.q);
