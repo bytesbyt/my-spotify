@@ -25,6 +25,7 @@ import { useInView } from "react-intersection-observer";
 import LoginButton from "../../common/components/LoginButton";
 import { AxiosError } from "axios";
 import EmptyPlaylistWithSearch from "../HomePage/components/EmptyPlaylistWithSearch";
+import { getSpotifyAuthUrl } from "../../utils/auth";
 
 const AlbumImage = styled("img")(({ theme }) => ({
   borderRadius: "8px",
@@ -95,6 +96,10 @@ const PlaylistDetailPage: React.FC = () => {
 
   if (isPlaylistLoading || isPlaylistItemsLoading) return <LoadingSpinner />;
 
+  const login = () => {
+        getSpotifyAuthUrl();
+    };
+
   const renderUnauthorizedError = () => (
     <Box
       display="flex"
@@ -110,15 +115,14 @@ const PlaylistDetailPage: React.FC = () => {
     </Box>
   );
 
-  if (
-    playlistItemsError instanceof AxiosError &&
-    playlistItemsError.response?.status === 401
-  ) {
-    return renderUnauthorizedError();
-  }
-  if (playlistItemsError || playlistError) {
-    return <ErrorMessage errorMessage= "Failed to load the playlist" />;
-  }
+  if (playlistError || playlistItemsError) {
+        if (playlistItemsError instanceof AxiosError && playlistItemsError.response?.status === 401 ||
+          playlistError instanceof AxiosError && playlistError.response?.status === 401
+        ) {
+            return renderUnauthorizedError();
+        }
+        return <ErrorMessage errorMessage={'Failed to load'} />;
+    }
 
   return (
     <Box

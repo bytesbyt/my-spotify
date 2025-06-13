@@ -9,7 +9,8 @@ export const getCurrentUserPlaylists = async({limit, offset}:
         })
         return response.data;
     } catch (error) {
-        throw new Error ("Failed to fetch current user playlists")
+        throw error;
+        //throw new Error ("Failed to fetch current user playlists")
     }
 }
 
@@ -49,6 +50,7 @@ export const createPlaylist = async (
         });
         return response.data
     } catch (error) {
-        throw new Error ("Failed to create playlist");
+        throw error;
+        //throw new Error ("Failed to create playlist");
     }
 }
