@@ -1,39 +1,64 @@
-import { Avatar, Box, styled } from "@mui/material";
-import React from 'react'
+import { Avatar, Box, ListItemIcon, Menu, MenuItem, styled } from "@mui/material";
+import React, { useState } from 'react'
 import LoginButton from "../../common/components/LoginButton";
 import useGetCurrentUserProfile from "../../hooks/useGetCurrentUserProfile";
+import BasicAvatar from '@mui/icons-material/AccountCircle';
+import LogoutIcon from '@mui/icons-material/Logout';
 import fallbackImage from "./blank_profile.png"
+import useUserLogout from "../../hooks/useUserLogout";
 
 const ProfileContainer = styled("div")({
   display: "flex",
+  justifyContent: 'flex-end',
   alignItems: "center",
-  cursor: "pointer",
   borderRadius: "8px",
   padding: "0 8px",
-  height: "100%",
+});
+
+const ProfileImage = styled('div')({
+    display: 'flex',
+    alignItems: 'center',
+    cursor: 'pointer',
 });
 
 const Navbar = () => {
   const {data: userProfile} = useGetCurrentUserProfile();
-  const profileImage = userProfile?.images?.[0]?.url || fallbackImage;
+  const logout = useUserLogout();
+
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  
+
+  const openMenu = (e: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(e.currentTarget);
+    };
+
+  const closeMenu = () => {
+        setAnchorEl(null);
+    };
 
   return (
-    <Box 
-        display="flex"
-        justifyContent="flex-end"
-        alignItems="center"
-        height= "64px"
-    >
-      {userProfile ? (
         <ProfileContainer>
-            <Avatar
-            src= {profileImage}
-            alt= {userProfile.display_name}
-            />        
+            {userProfile ? (
+                <ProfileImage>
+                    <Avatar onClick={openMenu} src={userProfile.images[0]?.url}>
+                        {!userProfile.images[0] && <BasicAvatar />}
+                    </Avatar>
+                    <Menu anchorEl={anchorEl} open={open} onClose={closeMenu}>
+                        <MenuItem onClick={logout}>
+                            <ListItemIcon sx={{ color: 'white' }}>
+                                <LogoutIcon fontSize="small" />
+                            </ListItemIcon>
+                            Log out
+                        </MenuItem>
+                    </Menu>
+                </ProfileImage>
+            ) : (
+                <LoginButton />
+            )}
         </ProfileContainer>
+    );
+};
 
-    ) : (<LoginButton />)}
-    </Box>
-  )
-}
-export default Navbar
+export default Navbar;
