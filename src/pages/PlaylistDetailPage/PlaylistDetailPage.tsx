@@ -93,7 +93,7 @@ const PlaylistDetailPage: React.FC = () => {
     }
   }, [inView]);
 
-  if (isPlaylistLoading) return <LoadingSpinner />;
+  if (isPlaylistLoading || isPlaylistItemsLoading) return <LoadingSpinner />;
 
   const renderUnauthorizedError = () => (
     <Box
@@ -117,7 +117,7 @@ const PlaylistDetailPage: React.FC = () => {
     return renderUnauthorizedError();
   }
   if (playlistItemsError || playlistError) {
-    return <ErrorMessage errorMessage="Failed to load" />;
+    return <ErrorMessage errorMessage= "Failed to load the playlist" />;
   }
 
   return (

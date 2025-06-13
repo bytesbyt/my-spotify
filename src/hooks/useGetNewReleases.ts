@@ -4,6 +4,7 @@ import useClientCredentialToken from "./useClientCredentialToken";
 
 const useGetNewReleases = () => {
     const clientCredentialToken = useClientCredentialToken();
+    
     return useQuery({
         queryKey: ["new-relases"],
         queryFn: async () => {
