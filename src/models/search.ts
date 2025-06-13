@@ -14,7 +14,7 @@ export const enum SEARCH_TYPE {
     Audiobook = "audiobook",
 }
 
-export interface SearchRequestparams {
+export interface SearchRequestParams {
     q: string;
     type: SEARCH_TYPE[];
     market?: string;

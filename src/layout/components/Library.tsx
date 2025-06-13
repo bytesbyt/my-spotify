@@ -21,6 +21,7 @@ const PlaylistContainer = styled("div")(({ theme }) => ({
     maxHeight: "calc(100vh - 65px - 119px)",
   },
 }));
+
 const Library = () => {
   const { ref, inView } = useInView();
   const {
@@ -34,6 +35,7 @@ const Library = () => {
     limit: 10,
     offset: 0
   });
+
   const { data: user } = useGetCurrentUserProfile();
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage){

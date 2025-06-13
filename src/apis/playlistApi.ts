@@ -10,7 +10,7 @@ export const getCurrentUserPlaylists = async({limit, offset}:
         return response.data;
     } catch (error) {
         throw error;
-        //throw new Error ("Failed to fetch current user playlists")
+        //throw new Error ("Failed to fetch current user playlists");
     }
 }
 

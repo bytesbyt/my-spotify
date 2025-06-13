@@ -24,8 +24,12 @@ import { PAGE_LIMIT } from "../../configs/commonConfig";
 import { useInView } from "react-intersection-observer";
 import LoginButton from "../../common/components/LoginButton";
 import { AxiosError } from "axios";
-import EmptyPlaylistWithSearch from "../HomePage/components/EmptyPlaylistWithSearch";
-import { getSpotifyAuthUrl } from "../../utils/auth";
+import EmptyPlaylistWithSearch from "./components/EmptyPlaylistWithSearch";
+import Library from "../../layout/components/Library";
+
+function isAxiosError(error: unknown): error is AxiosError {
+  return (error as AxiosError)?.isAxiosError === true;
+}
 
 const AlbumImage = styled("img")(({ theme }) => ({
   borderRadius: "8px",
@@ -65,7 +69,9 @@ const ResponsiveTypography = styled(Typography)(({ theme }) => ({
 
 const PlaylistDetailPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
+
   if (id === undefined) return <Navigate to="/" />;
+  //if (!id) return <EmptyPlaylist />;
 
   const scrollContainerRef = useRef(null);
 
@@ -87,42 +93,53 @@ const PlaylistDetailPage: React.FC = () => {
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useGetPlaylistItems({ playlist_id: id, limit: PAGE_LIMIT });
+  } = useGetPlaylistItems({ playlist_id: id!, limit: PAGE_LIMIT });
+
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
-  }, [inView]);
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (isPlaylistLoading || isPlaylistItemsLoading) return <LoadingSpinner />;
 
-  const login = () => {
-        getSpotifyAuthUrl();
-    };
-
   const renderUnauthorizedError = () => (
     <Box
+      flexDirection="column"
       display="flex"
       alignItems="center"
       justifyContent="center"
       height="100%"
-      flexDirection="column"
     >
-      <Typography variant="h2" fontWeight={700} mb="20px">
-        Please login again
-      </Typography>
-      <LoginButton />
+      <Box
+        sx ={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection:"column"
+        }}
+      >
+        <Typography variant="h2" fontWeight={700} mb="20px">
+          Please login again
+        </Typography>
+        <LoginButton />
+      </Box>
     </Box>
+  
   );
 
   if (playlistError || playlistItemsError) {
-        if (playlistItemsError instanceof AxiosError && playlistItemsError.response?.status === 401 ||
-          playlistError instanceof AxiosError && playlistError.response?.status === 401
+      console.log("playlistError:", playlistError);
+      console.log("playlistItemsError:", playlistItemsError);
+        if (
+          (isAxiosError(playlistError) && playlistError.response?.status === 401) ||
+          (isAxiosError(playlistItemsError) && playlistItemsError.response?.status === 401)
         ) {
-            return renderUnauthorizedError();
+            return renderUnauthorizedError()
         }
         return <ErrorMessage errorMessage={'Failed to load'} />;
     }
+
 
   return (
     <Box

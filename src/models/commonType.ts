@@ -39,13 +39,6 @@ export interface Tracks{
     total?: number;
 }
 
-interface LinkedTrack {
-  external_urls?: ExternalUrls;
-  href?: string;
-  id?: string;
-  type?: string;
-  uri?: string;
-}
 
 export interface Track {
     album?: SimplifiedAlbum;
@@ -63,11 +56,10 @@ export interface Track {
     href?: string;
     id?: string;
     is_playable?: boolean;
-    linked_from?: LinkedTrack;
+    linked_from?: Track;
     restrictions?: Restriction;
     name?: string;
     popularity?: number;
-    preview_url?: string | null;
     track_number?: number;
     type?: "track";
     uri?: string;
