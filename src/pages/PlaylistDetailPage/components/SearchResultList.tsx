@@ -51,9 +51,10 @@ const SearchResultList = ({
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
+      console.log('infinite scroll')
       fetchNextPage();
     }
-  }, [inView, hasNextPage, isFetchingNextPage]);
+  }, [inView]);
 
   return (
     <StyledTableContainer
@@ -64,6 +65,7 @@ const SearchResultList = ({
     >
       <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
         <TableBody sx={{ width: '100%' }}>
+
           {list.map((track) => (
             <StyledTableRow key={track.id}>
               <TableCell>
@@ -85,6 +87,7 @@ const SearchResultList = ({
               </TableCell>
             </StyledTableRow>
           ))}
+
         </TableBody>
       </Table>
       <div ref={ref} style={{ height: 1 }}>
