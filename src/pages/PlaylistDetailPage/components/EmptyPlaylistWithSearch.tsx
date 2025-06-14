@@ -37,28 +37,49 @@ const EmptyPlaylistWithSearch = () => {
 
   return (
     <div>
-      <Typography variant="h1" mt="50px" mb="30px">
-        What do you want to listen to?
-      </Typography>
+      <Box
+        sx ={{
+          paddingLeft: '1rem',
+          paddingRight: '1rem',
+          paddingTop: '1rem',
+          paddingBottom: '1rem',
+        }}
+      >
+        <Typography
+          variant="h5"
+          component= "h2"
+          my= "10px"
+          sx = {{
+            fontWeight: 'bold',
+            flexSjrink: 0,
+          }}
+        >
+          What do you want to listen to today?
+        </Typography>
 
-      <TextField
-        value={keyword}
-        onChange={handleSearchKeyword}
-        placeholder="Search"
-        style={{
-          width: '500px',
-          marginBottom: '23px',
-          backgroundColor: '#282828',
-        }}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon style={{ color: 'white' }} />
-            </InputAdornment>
-          ),
-        }}
-      />
+        <TextField
+          value={keyword}
+          onChange={handleSearchKeyword}
+          variant = "outlined"
+          placeholder="Search for artists or songs..."
+          sx={{
+            width: '420px',
+            borderRadius: '10px',
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            color: 'white',
+          }}
+
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon style={{ color: 'white' }} />
+              </InputAdornment>
+            ),
+          }}
+        />
+        </Box>
       <div>
+
         {isLoading ? (
           <LoadingSpinner />
         ) : keyword === '' ? (

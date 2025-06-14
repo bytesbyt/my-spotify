@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   styled,
+  Table,
   TableBody,
   TableCell,
   TableContainer,
@@ -18,8 +19,8 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   color: theme.palette.common.white,
   width: '100%',
 }));
+
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  width: '100%',
   '&:hover': {
     backgroundColor: theme.palette.action.hover,
   },
@@ -27,16 +28,19 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     borderBottom: 'none',
   },
 }));
+
 const AlbumImage = styled('img')({
   borderRadius: '4px',
   marginRight: '12px',
 });
+
 interface SearchResultListProps {
   list: Track[];
   hasNextPage: boolean;
   isFetchingNextPage: boolean;
   fetchNextPage: () => void;
 }
+
 const SearchResultList = ({
   list,
   hasNextPage,
@@ -52,33 +56,40 @@ const SearchResultList = ({
   }, [inView, hasNextPage, isFetchingNextPage]);
 
   return (
-    <StyledTableContainer>
-      <TableBody sx={{ width: '100%' }}>
-        {list.map((track) => (
-          <StyledTableRow key={track.id}>
-            <TableCell>
-              <Box display="flex" alignItems="center">
-                <Box>
-                  <AlbumImage src={track.album?.images[0].url} width="40px" />
+    <StyledTableContainer
+      sx={{
+        width: '100vw',
+        position: 'relative',
+      }}
+    >
+      <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
+        <TableBody sx={{ width: '100%' }}>
+          {list.map((track) => (
+            <StyledTableRow key={track.id}>
+              <TableCell>
+                <Box display="flex" alignItems="center">
+                  <Box>
+                    <AlbumImage src={track.album?.images[0].url} width="40px" />
+                  </Box>
+                  <Box>
+                    <Typography fontWeight={700}>{track.name}</Typography>
+                    <Typography color="text.secondary">
+                      {track.artists ? track.artists[0].name : 'Unknown Artist'}
+                    </Typography>
+                  </Box>
                 </Box>
-                <Box>
-                  <Typography fontWeight={700}>{track.name}</Typography>
-                  <Typography color="text.secondary">
-                    {track.artists ? track.artists[0].name : 'Unknown Artist'}
-                  </Typography>
-                </Box>
-              </Box>
-            </TableCell>
-            <TableCell>{track.album?.name}</TableCell>
-            <TableCell>
-              <Button>Add</Button>
-            </TableCell>
-          </StyledTableRow>
-        ))}
-        <div ref={ref} style={{ height: 1 }}>
-          {isFetchingNextPage && <LoadingSpinner />}
-        </div>
-      </TableBody>
+              </TableCell>
+              <TableCell>{track.album?.name}</TableCell>
+              <TableCell>
+                <Button>Add</Button>
+              </TableCell>
+            </StyledTableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <div ref={ref} style={{ height: 1 }}>
+        {isFetchingNextPage && <LoadingSpinner />}
+      </div>
     </StyledTableContainer>
   );
 };

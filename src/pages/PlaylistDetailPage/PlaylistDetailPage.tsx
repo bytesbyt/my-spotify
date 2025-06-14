@@ -25,7 +25,6 @@ import { useInView } from "react-intersection-observer";
 import LoginButton from "../../common/components/LoginButton";
 import { AxiosError } from "axios";
 import EmptyPlaylistWithSearch from "./components/EmptyPlaylistWithSearch";
-import Library from "../../layout/components/Library";
 
 function isAxiosError(error: unknown): error is AxiosError {
   return (error as AxiosError)?.isAxiosError === true;
@@ -71,7 +70,6 @@ const PlaylistDetailPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
 
   if (id === undefined) return <Navigate to="/" />;
-  //if (!id) return <EmptyPlaylist />;
 
   const scrollContainerRef = useRef(null);
 
@@ -119,8 +117,8 @@ const PlaylistDetailPage: React.FC = () => {
           flexDirection:"column"
         }}
       >
-        <Typography variant="h2" fontWeight={700} mb="20px">
-          Please login again
+        <Typography variant="h1" fontWeight={700} mb="20px">
+          Sign in again to continue viewing your playlist
         </Typography>
         <LoginButton />
       </Box>
