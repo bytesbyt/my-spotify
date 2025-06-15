@@ -25,6 +25,7 @@ import { useInView } from "react-intersection-observer";
 import LoginButton from "../../common/components/LoginButton";
 import { AxiosError } from "axios";
 import EmptyPlaylistWithSearch from "./components/EmptyPlaylistWithSearch";
+import { renderUnauthorizedError } from "./components/RenderUnauthorizedError";
 
 function isAxiosError(error: unknown): error is AxiosError {
   return (error as AxiosError)?.isAxiosError === true;
@@ -101,30 +102,7 @@ const PlaylistDetailPage: React.FC = () => {
 
   if (isPlaylistLoading || isPlaylistItemsLoading) return <LoadingSpinner />;
 
-  const renderUnauthorizedError = () => (
-    <Box
-      flexDirection="column"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      height="100%"
-    >
-      <Box
-        sx ={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection:"column"
-        }}
-      >
-        <Typography variant="h1" fontWeight={700} mb="20px">
-          Sign in again to continue viewing your playlist
-        </Typography>
-        <LoginButton />
-      </Box>
-    </Box>
-  
-  );
+
 
   if (playlistError || playlistItemsError) {
       console.log("playlistError:", playlistError);

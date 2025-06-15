@@ -10,9 +10,14 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import LoadingSpinner from '../../../common/components/LoadingSpinner';
 import { Track } from '../../../models/commonType';
+import useAddItemToPlaylist from '../../../hooks/useAddItemToPlaylist';
+import { useParams } from 'react-router';
+import useGetCurrentUserProfile from '../../../hooks/useGetCurrentUserProfile';
+import { getSpotifyAuthUrl } from '../../../utils/auth';
+import { renderUnauthorizedError } from './RenderUnauthorizedError';
 
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   background: theme.palette.background.paper,
@@ -51,10 +56,21 @@ const SearchResultList = ({
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
-      console.log('infinite scroll')
       fetchNextPage();
     }
-  }, [inView]);
+  }, [inView, hasNextPage, isFetchingNextPage]);
+
+  const { id } = useParams<{ id: string }>();
+  const { mutate: addItemToPlaylist } = useAddItemToPlaylist();
+  const { data: user } = useGetCurrentUserProfile();
+
+  const handleAddItemtoPlaylist = (uri: string) => {
+    if (id && user) {
+      addItemToPlaylist({ playlist_id: id, uris: [uri] });
+    } else {
+      getSpotifyAuthUrl();
+    }
+  };
 
   return (
     <StyledTableContainer
@@ -65,7 +81,6 @@ const SearchResultList = ({
     >
       <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
         <TableBody sx={{ width: '100%' }}>
-
           {list.map((track) => (
             <StyledTableRow key={track.id}>
               <TableCell>
@@ -83,11 +98,19 @@ const SearchResultList = ({
               </TableCell>
               <TableCell>{track.album?.name}</TableCell>
               <TableCell>
-                <Button>Add</Button>
+                <Button
+                  onClick={() => {
+                    if (track.uri) {
+                      handleAddItemtoPlaylist(track.uri);
+                    }
+                    return renderUnauthorizedError();
+                  }}
+                >
+                  Add
+                </Button>
               </TableCell>
             </StyledTableRow>
           ))}
-
         </TableBody>
       </Table>
       <div ref={ref} style={{ height: 1 }}>
