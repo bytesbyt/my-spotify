@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import useGetCategories from '../../hooks/useGetCategories';
 import LoadingSpinner from '../../common/components/LoadingSpinner';
 import ErrorMessage from '../../common/components/ErrorMessage';
+import { useInView } from 'react-intersection-observer';
 
 const generateRandomColor = () => {
   const letters = '0123456789ABCDEF';
@@ -14,9 +15,31 @@ const generateRandomColor = () => {
 };
 
 const SearchPage = () => {
-  const { data: categoriesData, isLoading, error } = useGetCategories();
+  const scrollContainerRef = useRef(null);
+  const { ref, inView } = useInView();
 
-  console.log('Categories Data:', categoriesData);
+  const { 
+    data: categoriesData, 
+    isLoading, 
+    error, 
+    hasNextPage, 
+    isFetchingNextPage, 
+    fetchNextPage 
+  } = useGetCategories();
+
+  useEffect(() => {
+    console.log('Scroll Status:', {
+      inView,
+      hasNextPage,
+      isFetchingNextPage,
+      currentItems: categoriesData?.pages.flatMap(page => page.categories.items).length || 0
+    });
+
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      console.log('Fetching next page...');
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage, categoriesData]);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -26,9 +49,11 @@ const SearchPage = () => {
     return <ErrorMessage errorMessage={error.message} />;
   }
 
+  const allCategories = categoriesData?.pages.flatMap(page => page.categories.items) || [];
+
   return (
-    <Box sx={{ p: { xs: 2, sm: 3, md: 4 } }}>
-      <Box sx={{ mb: { xs: 4, sm: 6, md: 8 } }} />
+    <Box sx={{ p: { xs: 2, sm: 3, md: 4 } }} ref={scrollContainerRef}>
+      <Box sx={{ mb: { xs: 2, sm: 3, md: 6 } }} />
       <Typography 
         variant="h1" 
         sx={{ 
@@ -45,16 +70,16 @@ const SearchPage = () => {
         sx={{
           display: 'grid',
           gridTemplateColumns: {
-            xs: 'repeat(1, 1fr)',
+            xs: 'repeat(2, 2fr)',
             sm: 'repeat(2, 1fr)',
             md: 'repeat(3, 1fr)',
             lg: 'repeat(4, 1fr)',
             xl: 'repeat(5, 1fr)',
           },
-          gap: { xs: 1, sm: 1.5, md: 2, lg: 2.5, xl: 3 },
+          gap: { xs: 1.5, sm: 1.5, md: 2, lg: 2.5, xl: 3 },
         }}
       >
-        {categoriesData?.categories.items.map((category, index) => (
+        {allCategories.map((category, index) => (
           <Box
             key={category.id}
             sx={{
@@ -117,6 +142,9 @@ const SearchPage = () => {
           </Box>
         ))}
       </Box>
+      <div ref={ref} style={{ height: '20px', marginTop: '20px' }}>
+        {isFetchingNextPage && <LoadingSpinner />}
+      </div>
     </Box>
   );
 };
