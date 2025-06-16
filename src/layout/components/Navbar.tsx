@@ -6,6 +6,8 @@ import BasicAvatar from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import fallbackImage from "./blank_profile.png"
 import useUserLogout from "../../hooks/useUserLogout";
+import { useLocation } from 'react-router';
+import SearchBar from '../../common/components/SearchBar';
 
 const ProfileContainer = styled("div")({
   display: "flex",
@@ -13,6 +15,17 @@ const ProfileContainer = styled("div")({
   alignItems: "center",
   borderRadius: "8px",
   padding: "0 8px",
+  width: "100%",
+  position: "relative",
+});
+
+const SearchContainer = styled(Box)({
+  position: "absolute",
+  left: "16px",
+  top: "50%",
+  transform: "translateY(-50%)",
+  width: "420px",
+  maxWidth: "calc(100% - 200px)",
 });
 
 const ProfileImage = styled('div')({
@@ -24,12 +37,12 @@ const ProfileImage = styled('div')({
 const Navbar = () => {
   const {data: userProfile} = useGetCurrentUserProfile();
   const logout = useUserLogout();
-
+  const location = useLocation();
+  const isSearchPage = location.pathname === '/search';
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   
-
   const openMenu = (e: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(e.currentTarget);
     };
@@ -40,6 +53,11 @@ const Navbar = () => {
 
   return (
         <ProfileContainer>
+            {isSearchPage && (
+              <SearchContainer>
+                <SearchBar />
+              </SearchContainer>
+            )}
             {userProfile ? (
                 <ProfileImage>
                     <Avatar onClick={openMenu} src={userProfile.images[0]?.url}>
