@@ -4,7 +4,6 @@ import useGetCategories from '../../hooks/useGetCategories';
 import LoadingSpinner from '../../common/components/LoadingSpinner';
 import ErrorMessage from '../../common/components/ErrorMessage';
 
-// Simple function to generate a random color
 const generateRandomColor = () => {
   const letters = '0123456789ABCDEF';
   let color = '#';
@@ -16,6 +15,8 @@ const generateRandomColor = () => {
 
 const SearchPage = () => {
   const { data: categoriesData, isLoading, error } = useGetCategories();
+
+  console.log('Categories Data:', categoriesData);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -32,11 +33,10 @@ const SearchPage = () => {
         variant="h1" 
         sx={{ 
           mb: { xs: 2, sm: 3, md: 4 },
-          fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
+          fontSize: { xs: '1rem', sm: '1.5rem', md: '2rem', lg: '2.5rem', xl: '3rem'  },
           fontWeight: 800,
           letterSpacing: '-0.04em',
           color: '#fff',
-          textShadow: '0 2px 4px rgba(0,0,0,0.2)',
         }}
       >
         Browse All
@@ -51,7 +51,7 @@ const SearchPage = () => {
             lg: 'repeat(4, 1fr)',
             xl: 'repeat(5, 1fr)',
           },
-          gap: { xs: 1.5, sm: 2, md: 2.5, lg: 3, xl: 3.5 },
+          gap: { xs: 1, sm: 1.5, md: 2, lg: 2.5, xl: 3 },
         }}
       >
         {categoriesData?.categories.items.map((category, index) => (
