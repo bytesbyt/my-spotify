@@ -28,12 +28,12 @@ const SearchPage = () => {
   } = useGetCategories();
 
   useEffect(() => {
-    console.log('Scroll Status:', {
-      inView,
-      hasNextPage,
-      isFetchingNextPage,
-      currentItems: categoriesData?.pages.flatMap(page => page.categories.items).length || 0
-    });
+    // console.log('Scroll Status:', {
+    //   inView,
+    //   hasNextPage,
+    //   isFetchingNextPage,
+    //   currentItems: categoriesData?.pages.flatMap(page => page.categories.items).length || 0
+    // });
 
     if (inView && hasNextPage && !isFetchingNextPage) {
       console.log('Fetching next page...');
@@ -49,7 +49,11 @@ const SearchPage = () => {
     return <ErrorMessage errorMessage={error.message} />;
   }
 
+  //console.log('Categories Data:', categoriesData);
+
   const allCategories = categoriesData?.pages.flatMap(page => page.categories.items) || [];
+
+  //console.log('All Categories:', allCategories);
 
   return (
     <Box sx={{ p: { xs: 2, sm: 3, md: 4 } }} ref={scrollContainerRef}>

@@ -1,25 +1,28 @@
-import React, { useState } from "react";
-
+import React from "react";
 import PlaylistItem from "../../common/components/PlaylistItem";
 import { SimplifiedPlaylistObject } from "../../models/playlist";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 interface PlaylistProps {
-  playlists: SimplifiedPlaylistObject [];
+  playlists: SimplifiedPlaylistObject[];
 }
 
 const Playlist = ({ playlists }: PlaylistProps) => {
-  const [selectedId, setSelectedId] = useState<string>("");
   const navigate = useNavigate();
+  const location = useLocation();
+  //console.log("playlists:", playlists);
+  //console.log("Location:", location);
+
+
   const handleItemClick = (id: string) => {
-    setSelectedId(id);
+
     navigate(`/playlist/${id}`);
   };
   return (
     <div>
       {playlists.map((item) => (
         <PlaylistItem
-          selected={selectedId === item.id}
+          selected={location.pathname === `/playlist/${item.id}`}
           handleClick={handleItemClick}
           name={item.name || ""}
           image={(item.images && item.images[0]?.url) || null}
