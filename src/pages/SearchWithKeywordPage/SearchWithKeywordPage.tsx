@@ -147,7 +147,6 @@ const SearchWithKeywordPage = () => {
           </Grid>
         </Grid>
 
-        {/* Artists Section */}
         {artists.length > 0 && (
           <Box sx={{ width: '100%', mt: 4 }}>
             <Typography
@@ -183,6 +182,47 @@ const SearchWithKeywordPage = () => {
                   image={artist.images?.[0]?.url || ''}
                   name={artist.name || ''}
                   artistName={'Artist'}
+                />
+              ))}
+            </Box>
+          </Box>
+        )}
+
+        {albums.length > 0 && (
+          <Box sx={{ width: '100%', mt: 4 }}>
+            <Typography
+              variant="h5"
+              sx={{
+                fontWeight: 800,
+                fontSize: { xs: '1.5rem', sm: '2rem' },
+                mb: 2,
+                color: 'white',
+                textAlign: 'left',
+              }}
+            >
+              Albums
+            </Typography>
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: {
+                  xs: 'repeat(2, 1fr)',
+                  sm: 'repeat(3, 1fr)',
+                  md: 'repeat(4, 1fr)',
+                  lg: 'repeat(5, 1fr)',
+                  xl: 'repeat(6, 1fr)',
+                },
+                gap: { xs: 2, sm: 3, md: 4 },
+                overflowX: { xs: 'auto', sm: 'visible' },
+                pb: 2,
+              }}
+            >
+              {albums.slice(0, 6).map((album) => (
+                <AlbumsBox
+                  key={album.id}
+                  image={album.images?.[0]?.url || ''}
+                  name={album.name || ''}
+                  artistName={album.artists?.[0]?.name || ''}
                 />
               ))}
             </Box>
