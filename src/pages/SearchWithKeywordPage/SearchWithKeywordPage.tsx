@@ -58,7 +58,7 @@ const SearchWithKeywordPage = () => {
   const { data, error, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } = useSearchItemsByKeyword({
     q: keyword ?? "",
     type: [SEARCH_TYPE.Track, SEARCH_TYPE.Album, SEARCH_TYPE.Artist],
-    limit: 20,
+    limit: 6,
   });
 
   useEffect(() => {

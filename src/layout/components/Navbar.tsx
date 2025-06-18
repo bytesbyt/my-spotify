@@ -64,10 +64,12 @@ const Navbar = () => {
 
   return (
         <ProfileContainer>
-            {isSearchPage && (
+            {isSearchPage ? (
               <SearchContainer>
                   <SearchBar onSelect={handleSelect} />
               </SearchContainer>
+            ) : (
+              <div style = {{ flex:1 }} />
             )}
             {userProfile ? (
                 <ProfileImage>
