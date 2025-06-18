@@ -27,6 +27,8 @@ const SearchPage = () => {
     fetchNextPage 
   } = useGetCategories();
 
+  console.log("categoriesData:", categoriesData);
+
   useEffect(() => {
     // console.log('Scroll Status:', {
     //   inView,

@@ -4,7 +4,6 @@ import LoginButton from "../../common/components/LoginButton";
 import useGetCurrentUserProfile from "../../hooks/useGetCurrentUserProfile";
 import BasicAvatar from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
-import fallbackImage from "./blank_profile.png"
 import useUserLogout from "../../hooks/useUserLogout";
 import { useLocation } from 'react-router';
 import SearchBar from '../../common/components/SearchBar';
@@ -38,7 +37,7 @@ const Navbar = () => {
   const {data: userProfile} = useGetCurrentUserProfile();
   const logout = useUserLogout();
   const location = useLocation();
-  const isSearchPage = location.pathname === '/search';
+  const isSearchPage = location.pathname.startsWith('/search');
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);

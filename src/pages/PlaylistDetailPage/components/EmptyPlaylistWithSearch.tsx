@@ -16,10 +16,10 @@ import LoadingSpinner from '../../../common/components/LoadingSpinner';
 import { useInView } from 'react-intersection-observer';
 
 const EmptyPlaylistWithSearch = () => {
-  const [keyword, setKeyword] = useState<string>('');
   const { ref, inView } = useInView();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [keyword, setKeyword] = useState<string>('');
 
   const {
     data,
@@ -36,7 +36,7 @@ const EmptyPlaylistWithSearch = () => {
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
-      console.log('Loading next page of search results...');
+      console.log('Loading...');
       fetchNextPage();
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
