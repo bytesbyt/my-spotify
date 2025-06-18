@@ -23,10 +23,15 @@ const CardContainer = styled('div')(({ theme }) => ({
 
 const ArtistImage = styled('img')({
   width: '100%',
-
   aspectRatio: 1,
   borderRadius: '50%',
   marginBottom: '8px',
+  padding: "5px",
+  transition: 'transform 0.3s ease',
+  '&:hover': {
+    transform: 'translateY(-5px)',
+  },
+
 });
 
 const EllipsisTypography = styled(Typography)({

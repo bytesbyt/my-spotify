@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router';
 import { TextField, InputAdornment, useTheme, useMediaQuery } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled } from '@mui/material/styles';
+
+interface SearchbarProps {
+  onSelect: (keyword: string) => void;
+}
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   '& .MuiOutlinedInput-root': {
@@ -31,24 +34,31 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   width: '100%',
 }));
 
-const SearchBar = () => {
+const SearchBar: React.FC<SearchbarProps> = ({onSelect}) => {
   const [keyword, setKeyword] = useState('');
-  const navigate = useNavigate();
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const handleSearch = () => {
-    const trimmedValue = keyword.trim();
-    if (trimmedValue) {
-      navigate(`/search/${encodeURIComponent(trimmedValue)}`);
-    } else {
-      navigate('/search');
-    }
+  // const handleSearch = () => {
+  //   const trimmedValue = keyword.trim();
+  //   if (trimmedValue) {
+  //     navigate(`/search/${encodeURIComponent(trimmedValue)}`);
+  //   } else {
+  //     navigate('/search');
+  //   }
+  // };
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyword(event.target.value);
   };
 
-  const handleKeyPress = (event: React.KeyboardEvent) => {
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.nativeEvent.isComposing) return;
     if (event.key === 'Enter') {
-      handleSearch();
+      const value = keyword.trim();
+      if (value) {
+        onSelect(value);
+      }
     }
   };
 
@@ -56,9 +66,9 @@ const SearchBar = () => {
     <StyledTextField
       placeholder={isMobile ? "Search" : "What do you want to listen to?"}
       value={keyword}
-      onChange={(e) => setKeyword(e.target.value)}
+      onChange={handleChange}
       onKeyPress={handleKeyPress}
-      onBlur={handleSearch}
+      //onBlur={handleSearch}
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
