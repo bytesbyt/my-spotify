@@ -1,6 +1,6 @@
 import { useTheme } from '@mui/material';
 import { Box, Grid, styled, Typography, useMediaQuery } from '@mui/material';
-import React, { use } from 'react';
+import React, { use, useEffect } from 'react';
 import { useParams } from 'react-router';
 import useSearchItemsByKeyword from '../../hooks/useSearchItemsByKeyword';
 import { SEARCH_TYPE } from '../../models/search';
@@ -8,6 +8,7 @@ import { useInView } from 'react-intersection-observer';
 import AlbumsBox from './components/AlbumsBox';
 import TrackList from './components/TrackList';
 import ArtistsBox from './components/ArtistsBox';
+import LoadingSpinner from '../../common/components/LoadingSpinner';
 
 const SearchKeywordResultContainer = styled(Box)({
   display: 'flex',
@@ -47,12 +48,26 @@ const SearchTrackListContainer = styled(Box)({
 const SearchWithKeywordPage = () => {
   const { keyword } = useParams<{ keyword: string }>();
   const theme = useTheme();
+  const { ref, inView } = useInView();
 
-  const { data, error, isLoading } = useSearchItemsByKeyword({
+  const {
+    data,
+    error,
+    isLoading,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useSearchItemsByKeyword({
     q: keyword ?? '',
     type: [SEARCH_TYPE.Track, SEARCH_TYPE.Album, SEARCH_TYPE.Artist],
     limit: 20,
   });
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   console.log('SearchWithKeywordPage data:', data);
 
@@ -122,6 +137,9 @@ const SearchWithKeywordPage = () => {
                 {tracks.map((track) => (
                   <TrackList key={track.id} track={track} />
                 ))}
+                <div ref={ref} style={{ height: '20px', marginTop: '20px' }}>
+                  {isFetchingNextPage && <LoadingSpinner />}
+                </div>
               </SearchTrackListContainer>
             ) : (
               ' '
@@ -162,11 +180,7 @@ const SearchWithKeywordPage = () => {
               {artists.slice(0, 6).map((artist) => (
                 <ArtistsBox
                   key={artist.id}
-                  image={
-                    artist.images && artist.images[0] && artist.images[0].url
-                      ? artist.images[0].url
-                      : ''
-                  }
+                  image={artist.images?.[0]?.url || ''}
                   name={artist.name || ''}
                   artistName={'Artist'}
                 />
