@@ -58,7 +58,7 @@ const SearchWithKeywordPage = () => {
   const { data, error, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } = useSearchItemsByKeyword({
     q: keyword ?? "",
     type: [SEARCH_TYPE.Track, SEARCH_TYPE.Album, SEARCH_TYPE.Artist],
-    limit: 6,
+    limit: 20,
   });
 
   useEffect(() => {
@@ -175,15 +175,14 @@ const SearchWithKeywordPage = () => {
                 sx={{
                   display: 'grid',
                   gridTemplateColumns: {
-                    xs: 'repeat(2, 1fr)',
+                    xs: 'repeat(2, 1fr)', 
                     sm: 'repeat(3, 1fr)',
-                    md: 'repeat(4, 1fr)',
-                    lg: 'repeat(5, 1fr)',
-                    xl: 'repeat(6, 1fr)',
+                    lg: 'repeat(6, 1fr)',
                   },
-                  gap: { xs: 2, sm: 3, md: 4 },
+                  gap: { xs: 1.5, sm: 2, md: 2.5, lg: 3 },
                   overflowX: { xs: 'auto', sm: 'visible' },
                   pb: 2,
+                  px: { xs: 0.5, sm: 1 }, // Add horizontal padding to prevent cut-off
                 }}
               >
                 
@@ -223,14 +222,13 @@ const SearchWithKeywordPage = () => {
                   display: 'grid',
                   gridTemplateColumns: {
                     xs: 'repeat(2, 1fr)',
-                    sm: 'repeat(3, 1fr)',
-                    md: 'repeat(4, 1fr)',
-                    lg: 'repeat(5, 1fr)',
-                    xl: 'repeat(6, 1fr)',
+                    md: 'repeat(3, 1fr)',
+                    lg: 'repeat(6, 1fr)',
                   },
-                  gap: { xs: 2, sm: 3, md: 4 },
+                  gap: { xs: 1.5, sm: 2, md: 2.5, lg: 3 },
                   overflowX: { xs: 'auto', sm: 'visible' },
                   pb: 2,
+                  px: { xs: 0.5, sm: 1 }, // Add horizontal padding to prevent cut-off
                 }}
               >
                 {albums.slice(0, 6).map((album) => (
@@ -251,14 +249,7 @@ const SearchWithKeywordPage = () => {
       </PlaylistlistContainer>
     </ SearchKeywordResultContainer>
     
-
-
-
-
-
-
   )
-
 
 }
 
