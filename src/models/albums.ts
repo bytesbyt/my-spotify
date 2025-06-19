@@ -1,10 +1,19 @@
 import { ApiResponse } from "./apiResponse";
 import { Artist } from "./artist";
-import { ExternalUrls, Image, Restriction } from "./commonType";
+import { ExternalUrls, Image, Restriction, Track } from "./commonType";
 
 export interface getNewReleasesResponse {
     albums: ApiResponse<SimplifiedAlbum>;
     };
+
+export interface getSeveralTracksRequest {
+    market?: string;
+    ids: string;
+}
+
+export interface getSeveralTracksResponse {
+    tracks: Track[];
+}
 
 export interface SimplifiedAlbum {
     album_type: string;
