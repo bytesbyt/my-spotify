@@ -22,7 +22,6 @@ import useGetPlaylistItems from "../../hooks/useGetPlaylistItems";
 import DesktopPlaylistItem from "./components/DesktopPlaylistItem";
 import { PAGE_LIMIT } from "../../configs/commonConfig";
 import { useInView } from "react-intersection-observer";
-import LoginButton from "../../common/components/LoginButton";
 import { AxiosError } from "axios";
 import EmptyPlaylistWithSearch from "./components/EmptyPlaylistWithSearch";
 import { renderUnauthorizedError } from "./components/RenderUnauthorizedError";
