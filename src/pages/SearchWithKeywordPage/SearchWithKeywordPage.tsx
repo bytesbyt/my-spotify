@@ -69,6 +69,13 @@ const SearchWithKeywordPage = () => {
 
   console.log("SearchWithKeywordPage data:", data);
 
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+  if (error) {
+    return <Typography color="error">Error: {error.message}</Typography>;
+  }
+
   const tracks = data?.pages.flatMap(page => page.tracks?.items ?? []) ?? [];
   const artists = data?.pages.flatMap(page => page.artists?.items ?? []) ?? [];
   const albums = data?.pages.flatMap(page => page.albums?.items ?? []) ?? [];
@@ -156,7 +163,7 @@ const SearchWithKeywordPage = () => {
             </Grid>
           </Grid>
 
-          {/* Artists Section */}
+
           {hasResult && (
             <Box sx={{ width: '100%', mt: 4 }}>
               <Typography
@@ -182,7 +189,7 @@ const SearchWithKeywordPage = () => {
                   gap: { xs: 1.5, sm: 2, md: 2.5, lg: 3 },
                   overflowX: { xs: 'auto', sm: 'visible' },
                   pb: 2,
-                  px: { xs: 0.5, sm: 1 }, // Add horizontal padding to prevent cut-off
+                  px: { xs: 0.5, sm: 1 }, 
                 }}
               >
                 
@@ -202,7 +209,7 @@ const SearchWithKeywordPage = () => {
             </Box>
           )}
 
-          {/* Albums Section */}
+
           {hasResult && (
             <Box sx={{ width: '100%', mt: 4 }}>
               <Typography
@@ -228,7 +235,7 @@ const SearchWithKeywordPage = () => {
                   gap: { xs: 1.5, sm: 2, md: 2.5, lg: 3 },
                   overflowX: { xs: 'auto', sm: 'visible' },
                   pb: 2,
-                  px: { xs: 0.5, sm: 1 }, // Add horizontal padding to prevent cut-off
+                  px: { xs: 0.5, sm: 1 },
                 }}
               >
                 {albums.slice(0, 6).map((album) => (

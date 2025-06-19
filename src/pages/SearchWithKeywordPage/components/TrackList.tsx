@@ -8,7 +8,6 @@ import {
   MenuItem,
   Snackbar,
   Alert,
-
   Tooltip,
 } from "@mui/material";
 
@@ -17,6 +16,7 @@ import useGetCurrentUserProfile from "../../../hooks/useGetCurrentUserProfile";
 import useGetCurrentUserPlaylists from "../../../hooks/useGetCurrentUserPlaylists";
 import useAddItemToPlaylist from "../../../hooks/useAddItemToPlaylist";
 import { Track } from "../../../models/commonType";
+import LoginModal from "./LoginModal";
 
 interface Props {
   track: Track;
@@ -35,6 +35,7 @@ const TrackListItem = ({ track }: Props) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
 
   const open = Boolean(anchorEl);
   const { data: userProfile } = useGetCurrentUserProfile();
@@ -119,9 +120,7 @@ const TrackListItem = ({ track }: Props) => {
               if (userProfile) {
                 handleClick(event);
               } else {
-                setSnackbarMessage("Please log in to add tracks to playlists");
-                setSnackbarSeverity("error");
-                setSnackbarOpen(true);
+                setLoginModalOpen(true);
               }
             }}
             sx={{
@@ -181,6 +180,12 @@ const TrackListItem = ({ track }: Props) => {
           )}
         </Menu>
       </Box>
+
+      {/* Login Modal */}
+      <LoginModal 
+        open={loginModalOpen} 
+        onClose={() => setLoginModalOpen(false)} 
+      />
 
       <Snackbar
         open={snackbarOpen}
