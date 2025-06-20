@@ -10,6 +10,8 @@ import { useLocation } from 'react-router';
 import SearchBar from '../../common/components/SearchBar';
 import { useNavigate } from 'react-router';
 
+
+
 const ProfileContainer = styled("div")(({ theme }) => ({
   display: "flex",
   justifyContent: 'space-between',
@@ -19,7 +21,7 @@ const ProfileContainer = styled("div")(({ theme }) => ({
   width: "100%",
   position: "relative",
   [theme.breakpoints.down('sm')]: {
-    padding: "0 4px",
+    padding: "10px 6px",
   },
 }));
 
@@ -44,8 +46,7 @@ const Navbar = () => {
   const logout = useUserLogout();
   const location = useLocation();
   const isSearchPage = location.pathname.startsWith('/search');
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);

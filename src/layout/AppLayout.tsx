@@ -6,6 +6,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import LibraryHead from './components/LibraryHead'
 import Library from "./components/Library"
 import Navbar from "./components/Navbar"
+import MobileBottomNavigation from "./components/MobileBottomNavigation"
 
 const Layout = styled("div")({
   display: "flex",
@@ -33,6 +34,7 @@ const MainContentBox = styled(Box)(({ theme }) => ({
   overflowY: 'auto',
   overflowX: 'hidden', 
   padding: "1rem",
+  
 }));
 
 const ContentBox = styled(Box)(({theme}) => ({
@@ -41,6 +43,7 @@ const ContentBox = styled(Box)(({theme}) => ({
   color: theme.palette.text.primary,
   width: "100%",
   padding: "10px",
+  
 }));
 
 const NavList = styled("ul")({
@@ -92,10 +95,15 @@ const AppLayout = () => {
           </ContentBox>
         </Sidebar>
 
-        <MainContentBox sx={{ p: { xs: 0, sm: 1, md: 2}}}>
+        <MainContentBox sx={{
+          p: { xs: 0, sm: 1, md: 2},
+          pb: { xs: '50px', sm: 1, md: 2},
+        }}>
           <Navbar/>
           <Outlet/>
         </MainContentBox>
+
+        <MobileBottomNavigation />
 
     </Layout>
   )
