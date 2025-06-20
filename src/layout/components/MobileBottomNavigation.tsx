@@ -53,7 +53,7 @@ const MobileBottomNavigation: React.FC = () => {
         <SearchIcon fontSize="small" />
         <NavText>Search</NavText>
       </NavItem>
-      <NavItem to="/playlists">
+      <NavItem to="/playlist">
         <LibraryMusicIcon fontSize="small" />
         <NavText>Your Library</NavText>
       </NavItem>
