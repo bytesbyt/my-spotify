@@ -9,6 +9,7 @@ import {
   Snackbar,
   Alert,
   Tooltip,
+  useMediaQuery,
 } from "@mui/material";
 
 import AddIcon from "@mui/icons-material/Add";
@@ -17,6 +18,7 @@ import useGetCurrentUserPlaylists from "../../../hooks/useGetCurrentUserPlaylist
 import useAddItemToPlaylist from "../../../hooks/useAddItemToPlaylist";
 import { Track } from "../../../models/commonType";
 import LoginModal from "./LoginModal";
+import theme from "../../../theme";
 
 interface Props {
   track: Track;
@@ -36,6 +38,8 @@ const TrackListItem = ({ track }: Props) => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
   const [loginModalOpen, setLoginModalOpen] = useState(false);
+
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const open = Boolean(anchorEl);
   const { data: userProfile } = useGetCurrentUserProfile();
@@ -114,6 +118,8 @@ const TrackListItem = ({ track }: Props) => {
           {track.duration_ms ? formatDuration(track.duration_ms) : "-"}
         </Typography>
 
+        {!isMobile && (
+
         <Tooltip title="Add to playlist" placement="top">
           <IconButton
             onClick={(event) => {
@@ -141,6 +147,7 @@ const TrackListItem = ({ track }: Props) => {
             <AddIcon sx={{ fontSize: 20 }} />
           </IconButton>
         </Tooltip>
+      )}
 
         <Menu
           anchorEl={anchorEl}
@@ -181,7 +188,7 @@ const TrackListItem = ({ track }: Props) => {
         </Menu>
       </Box>
 
-      {/* Login Modal */}
+
       <LoginModal 
         open={loginModalOpen} 
         onClose={() => setLoginModalOpen(false)} 
