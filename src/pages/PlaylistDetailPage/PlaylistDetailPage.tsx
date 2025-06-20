@@ -12,6 +12,8 @@ import {
   TableHead,
   TableRow,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import DefaultImage from "../../layout/components/DefaultImage";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
@@ -25,10 +27,12 @@ import { useInView } from "react-intersection-observer";
 import { AxiosError } from "axios";
 import EmptyPlaylistWithSearch from "./components/EmptyPlaylistWithSearch";
 import { renderUnauthorizedError } from "./components/RenderUnauthorizedError";
+import MobilePlaylistItem from "./components/MobilePlaylistItem";
 
-function isAxiosError(error: unknown): error is AxiosError {
+
+const isAxiosError = (error: unknown): error is AxiosError => {
   return (error as AxiosError)?.isAxiosError === true;
-}
+};
 
 const AlbumImage = styled("img")(({ theme }) => ({
   borderRadius: "8px",
@@ -84,6 +88,9 @@ const PlaylistDetailPage: React.FC = () => {
     rootMargin: "100px 0px",
   });
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const {
     data: playlistItems,
     isLoading: isPlaylistItemsLoading,
@@ -127,7 +134,7 @@ const PlaylistDetailPage: React.FC = () => {
       }}
     >
       <PlaylistHeaderContainer container spacing={{ xs: 2, md: 4 }}>
-        <ImageGrid item sm={12} md={2}>
+        <ImageGrid>
           {playlist?.images ? (
             <AlbumImage
               src={playlist?.images[0].url}
@@ -140,7 +147,7 @@ const PlaylistDetailPage: React.FC = () => {
           )}
         </ImageGrid>
 
-        <Grid item sm={12} md={10}>
+        <Grid>
           <Box>
             <ResponsiveTypography variant="h1" color="white" mb={2}>
               {playlist?.name}
@@ -173,6 +180,32 @@ const PlaylistDetailPage: React.FC = () => {
       {playlist?.tracks?.total === 0 ? (
         <EmptyPlaylistWithSearch />
       ) : (
+        isMobile ? (
+          <Box
+            ref={scrollContainerRef}
+            sx={{
+              flexGrow: 1,
+              overflow: "auto",
+              padding: 2,
+ 
+              "&::-webkit-scrollbar": {
+                display: "none",
+              },
+            }}
+          >
+            {playlistItems?.pages.map((page, pageIndex) =>
+              page.items.map((item, itemIndex) => (
+                <MobilePlaylistItem
+                  item={item}
+                  key={pageIndex * PAGE_LIMIT + itemIndex + 1}
+                />
+              ))
+            )}
+            <Box ref={ref} sx={{ height: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              {isFetchingNextPage && <LoadingSpinner />}
+            </Box>
+          </Box>
+        ) : (
         <TableContainer
           ref={scrollContainerRef}
           sx={{
@@ -183,6 +216,7 @@ const PlaylistDetailPage: React.FC = () => {
             },
           }}
         >
+
           <Table stickyHeader>
             <TableHead>
               <TableRow>
@@ -227,6 +261,7 @@ const PlaylistDetailPage: React.FC = () => {
             </TableBody>
           </Table>
         </TableContainer>
+        )
       )}
     </Box>
   );
